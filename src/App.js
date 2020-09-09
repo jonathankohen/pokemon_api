@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [pokemon, setPokemon] = useState([]);
+    const [isClicked, setIsClicked] = useState(false);
+
+    useEffect(() => {
+        fetch('https://pokeapi.co/api/v2/pokemon')
+            .then((res) => res.json())
+            .then((res) => setPokemon(res.results));
+    }, [isClicked]);
+
+    const handleClick = () => {
+        setIsClicked(true);
+    };
+
+    return (
+        <div className="App">
+            <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={handleClick}
+            >
+                Gotta Catch 'Em All!
+            </button>
+            {isClicked
+                ? pokemon.map((poke, index) => {
+                      return <div key={index}>{poke.name}</div>;
+                  })
+                : null}
+        </div>
+    );
 }
 
 export default App;
